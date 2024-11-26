@@ -52,8 +52,7 @@ const StyledTypography = styled(Typography)({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
 });
-
-export function Search() {
+export function Search({ onSearch }: { onSearch: (query: string) => void }) {
     return (
         <FormControl sx={{width: {xs: '100%', md: '25ch'}}} variant="outlined">
             <OutlinedInput
@@ -61,6 +60,7 @@ export function Search() {
                 id="search"
                 placeholder="Search…"
                 sx={{flexGrow: 1}}
+                onChange={(e) => onSearch(e.target.value)}
                 startAdornment={
                     <InputAdornment position="start" sx={{color: 'text.primary'}}>
                         <SearchRoundedIcon fontSize="small"/>
@@ -91,6 +91,8 @@ export default function MainContent() {
     const [openDialog, setOpenDialog] = React.useState(false)
     const [selectedCard, setSelectedCard] = React.useState<Events>()
     const [cardData, setCardData] = useState<Events[]>([]);
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [selectedChips, setSelectedChips] = useState<string[]>([]);
     const initialList = [
         {
             id: 1,
@@ -159,6 +161,46 @@ export default function MainContent() {
         console.info('You clicked the filter chip.');
     };
 
+    const handleSearch = (query: string) => {
+        setSearchQuery(query);
+
+        // Filter the initial list
+        const filteredData = initialList.filter((item) =>
+            item.title.toLowerCase().includes(query.toLowerCase()) ||
+            item.description.toLowerCase().includes(query.toLowerCase()) ||
+            item.tag.toLowerCase().includes(query.toLowerCase())
+        );
+
+        setCardData(filteredData);
+    };
+
+    const handleChipClick = (chip: string) => {
+        let updatedChips = [...selectedChips];
+
+        // Toggle chip selection
+        if (updatedChips.includes(chip)) {
+            updatedChips = updatedChips.filter((c) => c !== chip);
+        } else {
+            updatedChips.push(chip);
+        }
+
+        setSelectedChips(updatedChips);
+        filterData(searchQuery, updatedChips);
+    };
+
+    const filterData = (query: string, chips: string[]) => {
+        const filteredData = initialList.filter((item) => {
+            const matchesQuery =
+                query === '' ||
+                item.title.toLowerCase().includes(query.toLowerCase()) ||
+                item.description.toLowerCase().includes(query.toLowerCase());
+            const matchesChips = chips.length === 0 || chips.includes(item.tag);
+            return matchesQuery && matchesChips;
+        });
+
+        setCardData(filteredData);
+    };
+
     const handleDialog = (card: Events) =>{
         setOpenDialog(true)
         setSelectedCard(card)
@@ -185,7 +227,7 @@ export default function MainContent() {
                 </Typography>
                 <Typography>Volunteering platform</Typography>
             </div>
-            <Search/>
+            <Search onSearch={handleSearch} />
             <Box
                 sx={{
                     display: {xs: 'flex', sm: 'none'},
@@ -216,65 +258,107 @@ export default function MainContent() {
                     }}
                 >
                     <Chip key={1} onClick={handleClick} size="medium" label="For You"/>
-                    <Chip key={2} onClick={() => handleClick()} size="medium" label="My Subscribed Events"/>
+                    <Chip key={2} onClick={() => handleSearch("My Subs")} size="medium" label="My Subscribed Events"/>
                     <Chip
                         key={3}
-                        onClick={handleClick}
+                        onClick={() => handleChipClick("RESTful API")}
                         size="medium"
                         label="RESTful API"
+                        color={selectedChips.includes("RESTful API") ? 'primary' : 'default'} // Change color when selected
+                        clickable
                         sx={{
-                            backgroundColor: 'transparent',
-                            border: 'none',
+                            backgroundColor: selectedChips.includes("RESTful API") ? 'primary.main' : 'default',
+                            color: selectedChips.includes("RESTful API") ? 'white' : 'text.primary',
+                            border: selectedChips.includes("RESTful API") ? 'none' : '1px solid',
+                            borderColor: 'divider',
+                            '&:hover': {
+                                backgroundColor: selectedChips.includes("RESTful API") ? 'primary.dark' : 'grey.200',
+                            },
                         }}
                     />
                     <Chip
                         key={4}
-                        onClick={handleClick}
+                        onClick={() => handleChipClick("Mobile App")}
                         size="medium"
                         label="Mobile App"
+                        color={selectedChips.includes("Mobile App") ? 'primary' : 'default'} // Change color when selected
+                        clickable
                         sx={{
-                            backgroundColor: 'transparent',
-                            border: 'none',
+                            backgroundColor: selectedChips.includes("Mobile App") ? 'primary.main' : 'default',
+                            color: selectedChips.includes("Mobile App") ? 'white' : 'text.primary',
+                            border: selectedChips.includes("Mobile App") ? 'none' : '1px solid',
+                            borderColor: 'divider',
+                            '&:hover': {
+                                backgroundColor: selectedChips.includes("Mobile App") ? 'primary.dark' : 'grey.200',
+                            },
                         }}
                     />
                     <Chip
                         key={5}
-                        onClick={handleClick}
+                        onClick={() => handleChipClick("Web App")}
                         size="medium"
                         label="Web App"
+                        color={selectedChips.includes("Web App") ? 'primary' : 'default'} // Change color when selected
+                        clickable
                         sx={{
-                            backgroundColor: 'transparent',
-                            border: 'none',
+                            backgroundColor: selectedChips.includes("Web App") ? 'primary.main' : 'default',
+                            color: selectedChips.includes("Web App") ? 'white' : 'text.primary',
+                            border: selectedChips.includes("Web App") ? 'none' : '1px solid',
+                            borderColor: 'divider',
+                            '&:hover': {
+                                backgroundColor: selectedChips.includes("Web App") ? 'primary.dark' : 'grey.200',
+                            },
                         }}
                     />
                     <Chip
                         key={6}
-                        onClick={handleClick}
+                        onClick={() => handleChipClick("UX/UI Design")}
                         size="medium"
                         label="UX/UI Design"
+                        color={selectedChips.includes("UX/UI Design") ? 'primary' : 'default'} // Change color when selected
+                        clickable
                         sx={{
-                            backgroundColor: 'transparent',
-                            border: 'none',
+                            backgroundColor: selectedChips.includes("UX/UI Design") ? 'primary.main' : 'default',
+                            color: selectedChips.includes("UX/UI Design") ? 'white' : 'text.primary',
+                            border: selectedChips.includes("UX/UI Design") ? 'none' : '1px solid',
+                            borderColor: 'divider',
+                            '&:hover': {
+                                backgroundColor: selectedChips.includes("UX/UI Design") ? 'primary.dark' : 'grey.200',
+                            },
                         }}
                     />
                     <Chip
                         key={7}
-                        onClick={handleClick}
+                        onClick={() => handleChipClick("Security Protocols")}
                         size="medium"
                         label="Security Protocols"
+                        color={selectedChips.includes("Security Protocols") ? 'primary' : 'default'} // Change color when selected
+                        clickable
                         sx={{
-                            backgroundColor: 'transparent',
-                            border: 'none',
+                            backgroundColor: selectedChips.includes("Security Protocols") ? 'primary.main' : 'default',
+                            color: selectedChips.includes("Security Protocols") ? 'white' : 'text.primary',
+                            border: selectedChips.includes("Security Protocols") ? 'none' : '1px solid',
+                            borderColor: 'divider',
+                            '&:hover': {
+                                backgroundColor: selectedChips.includes("Security Protocols") ? 'primary.dark' : 'grey.200',
+                            },
                         }}
                     />
                     <Chip
                         key={8}
-                        onClick={handleClick}
+                        onClick={() => handleChipClick("Cloud Computing")}
                         size="medium"
                         label="Cloud Computing"
+                        color={selectedChips.includes("Cloud Computing") ? 'primary' : 'default'} // Change color when selected
+                        clickable
                         sx={{
-                            backgroundColor: 'transparent',
-                            border: 'none',
+                            backgroundColor: selectedChips.includes("Cloud Computing") ? 'primary.main' : 'default',
+                            color: selectedChips.includes("Cloud Computing") ? 'white' : 'text.primary',
+                            border: selectedChips.includes("Cloud Computing") ? 'none' : '1px solid',
+                            borderColor: 'divider',
+                            '&:hover': {
+                                backgroundColor: selectedChips.includes("Cloud Computing") ? 'primary.dark' : 'grey.200',
+                            },
                         }}
                     />
                 </Box>
