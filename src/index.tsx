@@ -1,36 +1,30 @@
 import React, {lazy, Suspense} from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import reportWebVitals from './reportWebVitals';
 import Blog from "./blog/Blog";
 import {CircularProgress} from "@mui/material";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 
-const Profile = lazy(() => import("./blog/components/Profile"));
+const Profile = lazy(() => import("./blog/Profile"));
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+    document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-      <Router>
-      <Routes>
-      <Route path="/" element={
-          <Suspense fallback={<CircularProgress/>}>
-              <Blog />
-          </Suspense>
-      }/>
-      <Route path="/profile" element={
-          <Suspense fallback={<CircularProgress/>}>
-              <Profile />
-          </Suspense>
-      }/>
-      </Routes>
-    </Router>
-  </React.StrictMode>
+    <React.StrictMode>
+        <Router>
+            <Routes>
+                <Route path="/" element={
+                    <Suspense fallback={<CircularProgress/>}>
+                        <Blog/>
+                    </Suspense>
+                }/>
+                <Route path="/profile" element={
+                    <Suspense fallback={<CircularProgress/>}>
+                        <Profile/>
+                    </Suspense>
+                }/>
+            </Routes>
+        </Router>
+    </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

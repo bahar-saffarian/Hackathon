@@ -81,7 +81,7 @@ interface Events {
     description: string,
     tag: string,
     joined: boolean,
-    skills: string
+    skills: any
 }
 
 export default function MainContent() {
@@ -102,13 +102,13 @@ export default function MainContent() {
             title: 'Smart Recycling App',
             description:
                 'A mobile app that helps users properly sort and recycle waste. It uses AI to identify recyclable materials from photos and provides tips on nearby recycling centers and collection schedules. Users can earn points for recycling and exchange them for rewards.',
-            skills:
-                "Mobile App Development (Flutter/React Native),\n "+
-                "Machine Learning (Image Recognition, TensorFlow/PyTorch),\n "+
-                "Backend Development (Node.js/Django),\n "+
-                "Cloud Storage (AWS/GCP),\n "+
+            skills: [
+                "Mobile App Development (Flutter/React Native)",
+                "Machine Learning (Image Recognition, TensorFlow/PyTorch)",
+                "Backend Development (Node.js/Django)",
+                "Cloud Storage (AWS/GCP)",
                 "Database Management (PostgreSQL/Firebase)"
-
+            ]
         },
         {
             id: 2,
@@ -118,12 +118,13 @@ export default function MainContent() {
             title: 'Inclusive Education Platform',
             description:
                 'A learning management system designed for differently-abled individuals. It offers courses with accessibility features like audio descriptions, sign language videos, and customizable text-to-speech functions.',
-            skills:
-                "- Web Development (React/Angular)\n"+
-                "- Accessibility Standards (WCAG)\n"+
-                "- UX/UI Design for Accessibility\n"+
-                "- Speech-to-Text Integration (Google Speech API)\n"+
-                "- Cloud Hosting (Azure)"
+            skills: [
+                "Web Development (React/Angular)",
+                "Accessibility Standards (WCAG)",
+                "UX/UI Design for Accessibility",
+                "Speech-to-Text Integration (Google Speech API)",
+                "Cloud Hosting (Azure)"
+            ]
 
         },
         {
@@ -135,13 +136,13 @@ export default function MainContent() {
             title: 'Carbon Footprint Tracker',
             description:
                 'A personal carbon footprint tracking app that calculates and visualizes a user’s daily carbon emissions based on their transportation, food choices, and energy use. It provides actionable recommendations for reducing emissions and tracks progress.',
-            skills:
-                "- App Development (Kotlin/Swift)\n " +
-                "- Data Visualization (D3.js)\n " +
-                "- Integration with IoT devices\n " +
-                "- API Development (RESTful/GraphQL)\n " +
-                "- Data Analytics and Sustainability Metrics"
-
+            skills: [
+                "App Development (Kotlin/Swift)",
+                "Data Visualization (D3.js)",
+                "Integration with IoT devices",
+                "API Development (RESTful/GraphQL)",
+                "Data Analytics and Sustainability Metrics"
+            ]
         }
     ]
 
@@ -201,18 +202,18 @@ export default function MainContent() {
         setCardData(filteredData);
     };
 
-    const handleDialog = (card: Events) =>{
+    const handleDialog = (card: Events) => {
         setOpenDialog(true)
         setSelectedCard(card)
     }
-    const handleCloseDialog = () =>{
+    const handleCloseDialog = () => {
         setOpenDialog(false)
     }
-    const handleJoinBtn = (joined: boolean)=> {
+    const handleJoinBtn = (joined: boolean) => {
         selectedCard!.joined = joined
         let newEvents = [...cardData]
         newEvents.map(c => {
-            if(c.id === selectedCard!.id){
+            if (c.id === selectedCard!.id) {
                 c = selectedCard!
             }
         })
@@ -375,38 +376,38 @@ export default function MainContent() {
             </Box>
             <Grid container spacing={2} columns={12}>
                 {cardData.map((cards, index) => {
-                    const { img,title, tag, description } = cards;
+                    const {img, title, tag, description} = cards;
                     return (<Grid size={{xs: 12, md: 4}}>
-                    <SyledCard
-                        variant="outlined"
-                        onFocus={() => handleFocus(0)}
-                        onBlur={handleBlur}
-                        tabIndex={0}
-                        className={focusedCardIndex === 0 ? 'Mui-focused' : ''}
-                        onClick={() => handleDialog(cards)}
-                    >
-                        <CardMedia
-                            component="img"
-                            alt="green iguana"
-                            image={img}
-                            sx={{
-                                aspectRatio: '16 / 9',
-                                borderBottom: '1px solid',
-                                borderColor: 'divider',
-                            }}
-                        />
-                        <SyledCardContent>
-                            <Typography gutterBottom variant="caption" component="div">
-                                {tag}
-                            </Typography>
-                            <Typography gutterBottom variant="h6" component="div">
-                                {title}
-                            </Typography>
-                            <StyledTypography variant="body2" color="text.secondary" gutterBottom>
-                                {description}
-                            </StyledTypography>
-                        </SyledCardContent>
-                    </SyledCard>
+                        <SyledCard
+                            variant="outlined"
+                            onFocus={() => handleFocus(0)}
+                            onBlur={handleBlur}
+                            tabIndex={0}
+                            className={focusedCardIndex === 0 ? 'Mui-focused' : ''}
+                            onClick={() => handleDialog(cards)}
+                        >
+                            <CardMedia
+                                component="img"
+                                alt="green iguana"
+                                image={img}
+                                sx={{
+                                    aspectRatio: '16 / 9',
+                                    borderBottom: '1px solid',
+                                    borderColor: 'divider',
+                                }}
+                            />
+                            <SyledCardContent>
+                                <Typography gutterBottom variant="caption" component="div">
+                                    {tag}
+                                </Typography>
+                                <Typography gutterBottom variant="h6" component="div">
+                                    {title}
+                                </Typography>
+                                <StyledTypography variant="body2" color="text.secondary" gutterBottom>
+                                    {description}
+                                </StyledTypography>
+                            </SyledCardContent>
+                        </SyledCard>
                         {selectedCard && <Dialog
                             open={openDialog}
                             onClose={handleCloseDialog}
@@ -420,22 +421,30 @@ export default function MainContent() {
                                 {selectedCard!.title}
                             </DialogTitle>
                             <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                                {selectedCard!.description}
-                            </DialogContentText>
-                            <Divider></Divider>
-                            <DialogTitle id="alert-dialog-title">Desired Skills
-                            </DialogTitle>
-                            <DialogContentText id="alert-dialog-description">
-                                {selectedCard.skills}
-                            </DialogContentText>
+                                <DialogContentText id="alert-dialog-description">
+                                    {selectedCard!.description}
+                                </DialogContentText>
+                                {selectedCard.skills && (
+                                    <>
+                                        <Divider></Divider>
+                                        <DialogTitle id="alert-dialog-title">
+                                            Desired Skills
+                                        </DialogTitle>
+                                        <DialogContentText id="alert-dialog-description">
+                                            {selectedCard.skills.map((skill: string) => {
+                                                return (<Chip label={skill}/>)
+                                            })}
+                                        </DialogContentText>
+                                    </>
+                                )}
                             </DialogContent>
                             <DialogActions>
                                 {!selectedCard?.joined && <Button onClick={() => handleJoinBtn(true)}>Join</Button>}
                                 {selectedCard?.joined && <Button onClick={() => handleJoinBtn(false)} autoFocus>Unjoin</Button>}
                             </DialogActions>
                         </Dialog>}
-                </Grid>)})}
+                    </Grid>)
+                })}
             </Grid>
         </Box>
     );
